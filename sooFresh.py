@@ -15,13 +15,11 @@ class SooFresh():
         self.framework = framework
 
 
-
-
 def get_bulma_starter():
     # hack since name is reserved
     meta = Tag(builder=soup.builder,
-        name='meta',
-        attrs={'name':"viewport", 'content': 'width=device-width, initial-scale=1'})
+               name='meta',
+               attrs={'name': "viewport", 'content': 'width=device-width, initial-scale=1'})
 
     stylesheet = soup.new_tag(
         'link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css'
@@ -36,24 +34,41 @@ def initialize_framework(head: Tag):
     head.append(stylesheet)
 
 
+def apply_tag_styles(tag_dict: dict, soup):
+    for tag, css_class in tag_dict.items():
+        if tag == 'radio' or tag == 'checkbox':
+            continue
+        for elem in soup.find_all(tag):
+            if not elem.get('class'):
+                elem['class'] = css_class
+            else:
+                elem['class'].append(css_class)
+
+            if tag == 'input':
+                if elem.get('type') == 'radio':
+                    if 'radio' in tag_dict:
+                        elem['class'] = elem['class'] + " " + tag_dict['radio']
+                elif elem.get('type') == 'checkbox':
+                    if 'checkbox' in tag_dict:
+                        elem['class'] = elem['class'] + " " + tag_dict['checkbox']
+
+
+tag_styles = {
+    'input': 'input',
+    'label': 'label',
+    'textarea': 'textarea',
+    'select': 'select',
+    'button': 'button',
+    'checkbox': 'checkbox',
+    'radio': 'radio',
+}
+
+# input styles
+# 'checkbox': 'checkbox',
+# 'radio': 'radio',
+
 
 initialize_framework(soup.head)
-
-
-for btn in soup.find_all('button'):
-    print(btn.get('class'))
-
-# meta, stylesheet = get_bulma_starter()
-
-# soup.head.append(meta)
-# soup.head.append(stylesheet)
-
-# print(soup.head)
-
-
-
-
-
 
 
 def import_framework(name):
@@ -61,16 +76,15 @@ def import_framework(name):
         meta, stylesheet = get_bulma_starter()
 
 
+apply_tag_styles(tag_styles, soup)
 
 folder = os.path.dirname(file_path)
 file = os.path.basename(file_path)
 file_name, ext = os.path.splitext(file)
 
-new_file_name = os.path.join(folder, file_name+'-fresh'+ext)
+new_file_name = os.path.join(folder, file_name + '-fresh' + ext)
 with open(new_file_name, 'w') as out_file:
     out_file.write(soup.prettify())
-
-
 
 # print(btn.get('class', []))
 
