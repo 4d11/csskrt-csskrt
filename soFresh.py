@@ -18,7 +18,6 @@ def add_class_to_element(elem, css_class):
             elem['class'] += ' ' + css_class
 
 
-
 class SooFresh():
     def __init__(self, html, framework):
         self.html = html
@@ -88,6 +87,7 @@ def add_form_classes(soup, tag_dict: dict):
                 if (tag_dict.get(elem.name)):
                     add_class_to_element(elem, tag_dict[elem.name])
 
+
 def output_soup(soup, file_path):
     folder = os.path.dirname(file_path)
     file = os.path.basename(file_path)
@@ -98,13 +98,11 @@ def output_soup(soup, file_path):
         out_file.write(soup.prettify())
 
 
-
 def freshify(soup):
     initialize_framework(soup.head)
     # apply_tag_styles(tag_styles, soup)
     add_form_classes(soup, tag_styles)
     output_soup(soup, file_path)
-
 
 
 
