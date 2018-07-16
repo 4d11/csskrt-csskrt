@@ -88,12 +88,22 @@ def add_form_classes(soup, tag_dict: dict):
                 if (tag_dict.get(elem.name)):
                     add_class_to_element(elem, tag_dict[elem.name])
 
+def output_soup(soup, file_path):
+    folder = os.path.dirname(file_path)
+    file = os.path.basename(file_path)
+    file_name, ext = os.path.splitext(file)
+
+    new_file_name = os.path.join(folder, file_name + '-fresh' + ext)
+    with open(new_file_name, 'w') as out_file:
+        out_file.write(soup.prettify())
+
+
 
 def freshify(soup):
     initialize_framework(soup.head)
     # apply_tag_styles(tag_styles, soup)
     add_form_classes(soup, tag_styles)
-
+    output_soup(soup, file_path)
 
 
 
@@ -110,13 +120,7 @@ tag_styles = {
 
 freshify(soup)
 
-folder = os.path.dirname(file_path)
-file = os.path.basename(file_path)
-file_name, ext = os.path.splitext(file)
 
-new_file_name = os.path.join(folder, file_name + '-fresh' + ext)
-with open(new_file_name, 'w') as out_file:
-    out_file.write(soup.prettify())
 
 # print(btn.get('class', []))
 
