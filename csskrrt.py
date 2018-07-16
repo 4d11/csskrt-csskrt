@@ -18,7 +18,7 @@ def add_class_to_element(elem, css_class):
             elem['class'] += ' ' + css_class
 
 
-class SooFresh():
+class Csskrrt():
     def __init__(self, html, framework):
         self.html = html
         self.framework = framework
