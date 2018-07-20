@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
-from .csskrrt import Csskrrt
+from csskrrt import Csskrrt
 
 class BulmaCsskrrt(Csskrrt):
     def __init__(self, html):
@@ -12,8 +12,7 @@ class BulmaCsskrrt(Csskrrt):
             'checkbox': 'checkbox',
             'radio': 'radio',
         }
-        super.__init__(html, tag_styles)
-
+        super().__init__(html, tag_styles)
 
     def get_starter_tags(self):
         # hack since 'name' is reserved
@@ -25,7 +24,6 @@ class BulmaCsskrrt(Csskrrt):
             'link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css'
         )
         return [meta, stylesheet]
-
 
     def add_form_classes(self, tag_dict: dict):
         for form in self.soup.find_all('form'):
