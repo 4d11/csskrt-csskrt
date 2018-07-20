@@ -3,7 +3,7 @@ from csskrrt import Csskrrt
 
 
 class BulmaCsskrrt(Csskrrt):
-    def __init__(self, html):
+    def __init__(self, fileName):
         tag_styles = {
             'input': 'input',
             'label': 'label',
@@ -13,7 +13,7 @@ class BulmaCsskrrt(Csskrrt):
             'checkbox': 'checkbox',
             'radio': 'radio',
         }
-        super().__init__(html, tag_styles)
+        super().__init__(fileName, tag_styles)
 
     def get_starter_tags(self):
         # hack since 'name' is reserved

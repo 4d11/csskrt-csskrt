@@ -1,16 +1,16 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 import os
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict
 
-file_path = 'test/test1.html'
 
-f = open(file_path)
-f_data = f.read()
+class Csskrrt(ABC):
+    def __init__(self, filename: str, tag_styles: Dict):
+        f = open(filename)  # should be able to handle dirs (for later) todo
+        f_data = f.read()
 
-class Csskrrt():
-    def __init__(self, html, tag_styles):
-        self.soup = BeautifulSoup(html, 'html.parser')
+        self.file_path = filename
+        self.soup = BeautifulSoup(f_data, 'html.parser')
         self.tag_styles = tag_styles
 
     @abstractmethod
@@ -50,12 +50,12 @@ class Csskrrt():
                     if (tag_dict.get(elem.name)):
                         self.add_class_to_element(elem, tag_dict[elem.name])
 
-    def output(self, file_path):
-        folder = os.path.dirname(file_path)
-        file = os.path.basename(file_path)
+    def output(self):
+        folder = os.path.dirname(self.file_path)
+        file = os.path.basename(self.file_path)
         file_name, ext = os.path.splitext(file)
 
-        new_file_name = os.path.join(folder, file_name + '-fresh' + ext)
+        new_file_name = os.path.join(folder, 'csskrrt_' + file_name + ext)
         with open(new_file_name, 'w') as out_file:
             out_file.write(self.soup.prettify())
 
@@ -63,27 +63,6 @@ class Csskrrt():
         starter_tags = self.get_starter_tags()
         self.initialize_framework(self.soup.head, starter_tags)
         self.add_form_classes(self.tag_styles)
-        self.output(file_path)
-
-
-"""
- folder = os.path.dirname(file_path)
-        file = os.path.basename(file_path)
-        file_name, ext = os.path.splitext(file)
-
-        new_file_name = os.path.join(folder, file_name + '-fresh' + ext)
-        with open(new_file_name, 'w') as out_file:
-            out_file.write(self.soup.prettify())
-
-"""
-
-
+        self.output()
 
 # print(btn.get('class', []))
-
-
-# soup = BeautifulSoup("<b></b>")
-# original_tag = soup.b
-#
-# new_tag = soup.new_tag("a", href="http://www.example.com")
-# original_tag.append(new_tag)
