@@ -17,6 +17,10 @@ class Csskrrt(ABC):
     def get_starter_tags(self) -> List[Tag]:
         pass
 
+    @abstractmethod
+    def get_wrapper_tag(self) -> List[Tag] or None:
+        pass
+
     def add_class_to_element(self, elem, css_class):
         if not elem.get('class'):
             elem['class'] = css_class
@@ -29,6 +33,14 @@ class Csskrrt(ABC):
     def initialize_framework(self, head: Tag, tags: List[Tag]):
         for tag in tags:
             head.append(tag)
+
+    def add_wrapper_tag(self, wrapper_tag: Tag):
+        # potentially optimize by using wrap and swapping attributes?
+        body_children = list(self.soup.body.children)
+        self.soup.body.clear()
+        self.soup.body.append(wrapper_tag)
+        for child in body_children:
+            wrapper_tag.append(child)
 
     def add_form_classes(self, tag_dict: dict):
         for form in self.soup.find_all('form'):
@@ -61,7 +73,11 @@ class Csskrrt(ABC):
 
     def freshify(self):
         starter_tags = self.get_starter_tags()
+        wrapper_tag = self.get_wrapper_tag()
+
         self.initialize_framework(self.soup.head, starter_tags)
+        if wrapper_tag:
+            self.add_wrapper_tag(wrapper_tag)
         self.add_form_classes(self.tag_styles)
         self.output()
 

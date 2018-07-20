@@ -26,6 +26,12 @@ class BulmaCsskrrt(Csskrrt):
         )
         return [meta, stylesheet]
 
+    def get_wrapper_tag(self):
+        div = self.soup.new_tag(
+            'div', **{'class': 'container'}
+        )
+        return div
+
     def add_form_classes(self, tag_dict: dict):
         for form in self.soup.find_all('form'):
             spotted_label = None
