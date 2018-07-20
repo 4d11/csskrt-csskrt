@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 from csskrrt import Csskrrt
 
+
 class BulmaCsskrrt(Csskrrt):
     def __init__(self, html):
         tag_styles = {

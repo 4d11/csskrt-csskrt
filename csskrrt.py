@@ -60,7 +60,8 @@ class Csskrrt():
             out_file.write(self.soup.prettify())
 
     def freshify(self):
-        self.initialize_framework(self.soup.head)
+        starter_tags = self.get_starter_tags()
+        self.initialize_framework(self.soup.head, starter_tags)
         self.add_form_classes(self.tag_styles)
         self.output(file_path)
 
