@@ -17,7 +17,6 @@ class Csskrrt():
     def get_starter_tags(self) -> List[Tag]:
         pass
 
-
     def add_class_to_element(self, elem, css_class):
         if not elem.get('class'):
             elem['class'] = css_class
@@ -27,11 +26,9 @@ class Csskrrt():
             except AttributeError:
                 elem['class'] += ' ' + css_class
 
-
     def initialize_framework(self, head: Tag, tags: List[Tag]):
         for tag in tags:
             head.append(tag)
-
 
     def add_form_classes(self, tag_dict: dict):
         for form in self.soup.find_all('form'):
