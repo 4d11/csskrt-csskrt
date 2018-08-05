@@ -32,6 +32,16 @@ class BulmaCsskrrt(Csskrrt):
         )
         return div
 
+    def get_table_styles(self):
+        return {
+            'table': 'table',
+            'thead': 'thead',
+            'tbody': 'tbody',
+            'tr': 'tr',
+            'th': 'th',
+            'td': 'td'
+        }
+
     def add_form_classes(self, tag_dict: dict):
         for form in self.soup.find_all('form'):
             spotted_label = None
@@ -67,4 +77,3 @@ class BulmaCsskrrt(Csskrrt):
                     spotted_label = None
                     if (tag_dict.get(elem.name)):
                         self.add_class_to_element(elem, tag_dict[elem.name])
-

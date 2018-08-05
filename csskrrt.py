@@ -30,6 +30,15 @@ class Csskrrt(ABC):
         """
         pass
 
+    @abstractmethod
+    def get_table_styles(self) -> Dict:
+        """
+        Return a dictionary of the table-specific tag and the corresponding
+        css styles
+        Eg. { 'table': 'my-table-class, 'thead': 'my-thead-class' }
+        :return:
+        """
+
     def add_class_to_element(self, elem, css_class):
         if not elem.get('class'):
             elem['class'] = css_class
@@ -62,7 +71,7 @@ class Csskrrt(ABC):
         for child in body_children:
             wrapper_tag.append(child)
 
-    def add_form_classes(self, tag_dict: dict):
+    def add_form_classes(self, tag_dict: dict) -> NoReturn:
         """
         Adds classes for form fields
         :param tag_dict:
@@ -87,6 +96,27 @@ class Csskrrt(ABC):
                     if (tag_dict.get(elem.name)):
                         self.add_class_to_element(elem, tag_dict[elem.name])
 
+    def add_table_classes(self, table_tag_dict: dict) -> NoReturn:
+        """
+        Apply the styles to table elements
+        Supports the following tags:
+            ('table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td')
+
+        :param table_tag_dict:
+        :return:
+        """
+        table_keys = ('thead', 'tbody', 'tfoot', 'tr', 'th', 'td')
+
+        for table in self.soup.find_all('table'):
+            if table_tag_dict.get('table'):  # Add style to table tag
+                self.add_class_to_element(table, table_tag_dict['table'])
+
+            for tk in table_keys:
+                if table_tag_dict.get(tk):
+                    all_table_elems = table.find_all(tk)
+                    for elem in all_table_elems:
+                        self.add_class_to_element(elem, table_tag_dict[tk])
+
     def output(self) -> NoReturn:
         """
         Outputs a new file.
@@ -107,11 +137,13 @@ class Csskrrt(ABC):
         """
         starter_tags = self.get_starter_tags()
         wrapper_tag = self.get_wrapper_tag()
+        table_tags = self.get_table_styles()
 
         self.initialize_framework(self.soup.head, starter_tags)
         if wrapper_tag:
             self.add_wrapper_tag(wrapper_tag)
         self.add_form_classes(self.tag_styles)
+        self.add_table_classes(table_tags)
         self.output()
 
 # print(btn.get('class', []))
