@@ -1,19 +1,19 @@
 import click
-from bulmaCsskrrt import BulmaCsskrrt
+from bulmaCsskrt import BulmaCsskrt
 
 
 @click.command()
 @click.argument('filename', type=click.Path(exists=True))
 @click.option('--framework', default='bulma', help='Name of the framework')
 def freshify(filename, framework):
-    csskrrter = None
+    csskrter = None
 
     if framework == 'bootstrap':
         raise NotImplementedError
     elif framework == 'bulma':
-        csskrrter = BulmaCsskrrt(filename)
+        csskrter = BulmaCsskrt(filename)
 
-    csskrrter.freshify()
+        csskrter.freshify()
 
 
 if __name__ == '__main__':

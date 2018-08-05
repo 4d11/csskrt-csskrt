@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
-from csskrrt import Csskrrt
+from csskrt import Csskrt
 
 
-class BulmaCsskrrt(Csskrrt):
+class BulmaCsskrt(Csskrt):
     def __init__(self, fileName):
         tag_styles = {
             'input': 'input',

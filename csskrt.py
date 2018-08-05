@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, NoReturn
 
 
-class Csskrrt(ABC):
+class Csskrt(ABC):
     def __init__(self, filename: str, tag_styles: Dict):
         f = open(filename)  # should be able to handle dirs (for later) todo
         f_data = f.read()
@@ -126,7 +126,7 @@ class Csskrrt(ABC):
         file = os.path.basename(self.file_path)
         file_name, ext = os.path.splitext(file)
 
-        new_file_name = os.path.join(folder, 'csskrrt_' + file_name + ext)
+        new_file_name = os.path.join(folder, 'csskrt_' + file_name + ext)
         with open(new_file_name, 'w') as out_file:
             out_file.write(self.soup.prettify())
 
