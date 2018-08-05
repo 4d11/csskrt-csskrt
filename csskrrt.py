@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup, Tag, NavigableString
 import os
 from abc import ABC, abstractmethod
-from typing import List, Dict
+from typing import List, Dict, NoReturn
 
 
 class Csskrrt(ABC):
@@ -15,10 +15,19 @@ class Csskrrt(ABC):
 
     @abstractmethod
     def get_starter_tags(self) -> List[Tag]:
+        """
+        Return a list of the Tags you want to add to the <head>
+        :return:
+        """
         pass
 
     @abstractmethod
     def get_wrapper_tag(self) -> List[Tag] or None:
+        """
+        Return the 'wrapper' class for your framework.
+        Eg. 'container' for Bootstrap
+        :return:
+        """
         pass
 
     def add_class_to_element(self, elem, css_class):
@@ -31,10 +40,21 @@ class Csskrrt(ABC):
                 elem['class'] += ' ' + css_class
 
     def initialize_framework(self, head: Tag, tags: List[Tag]):
+        """
+        Applys the header tags to the head
+        :param head:
+        :param tags:
+        :return:
+        """
         for tag in tags:
             head.append(tag)
 
     def add_wrapper_tag(self, wrapper_tag: Tag):
+        """
+        Add the container tag for the framework
+        :param wrapper_tag:
+        :return:
+        """
         # potentially optimize by using wrap and swapping attributes?
         body_children = list(self.soup.body.children)
         self.soup.body.clear()
@@ -43,6 +63,11 @@ class Csskrrt(ABC):
             wrapper_tag.append(child)
 
     def add_form_classes(self, tag_dict: dict):
+        """
+        Adds classes for form fields
+        :param tag_dict:
+        :return:
+        """
         for form in self.soup.find_all('form'):
             for elem in form.children:
                 if elem.name == 'label':
@@ -62,7 +87,11 @@ class Csskrrt(ABC):
                     if (tag_dict.get(elem.name)):
                         self.add_class_to_element(elem, tag_dict[elem.name])
 
-    def output(self):
+    def output(self) -> NoReturn:
+        """
+        Outputs a new file.
+        :return:
+        """
         folder = os.path.dirname(self.file_path)
         file = os.path.basename(self.file_path)
         file_name, ext = os.path.splitext(file)
@@ -71,7 +100,11 @@ class Csskrrt(ABC):
         with open(new_file_name, 'w') as out_file:
             out_file.write(self.soup.prettify())
 
-    def freshify(self):
+    def freshify(self) -> NoReturn:
+        """
+        Main function that applies all the necessary styles
+        :return:
+        """
         starter_tags = self.get_starter_tags()
         wrapper_tag = self.get_wrapper_tag()
 
