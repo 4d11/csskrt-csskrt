@@ -3,5 +3,11 @@ venv/
 __pycache__/
 *.pyc
 
-test/*-fresh.html
-test/csskrt*
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+/*.egg
+
+test/output/*

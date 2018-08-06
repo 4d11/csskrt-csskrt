@@ -172,7 +172,7 @@ class Csskrt(ABC):
         file = os.path.basename(self.file_path)
         file_name, ext = os.path.splitext(file)
 
-        new_file_name = os.path.join(folder, 'csskrt_' + file_name + ext)
+        new_file_name = os.path.join(folder, 'output/csskrt_' + file_name + ext)
         with open(new_file_name, 'w') as out_file:
             if self.pretty_print:
                 out_file.write(str(self.soup))
