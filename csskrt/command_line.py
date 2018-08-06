@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import click
 from bulmaCsskrt import BulmaCsskrt
 from bootstrapCsskrt import BootstrapCsskrt
