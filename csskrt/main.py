@@ -14,12 +14,12 @@ def freshify(filename, framework, pretty_print):
     csskrter = None
 
     if framework == 'bootstrap':
-        csskrter = BootstrapCsskrt(filename, pretty_print)
+        csskrter = BootstrapCsskrt(filename)
     elif framework == 'bulma':
-        csskrter = BulmaCsskrt(filename, pretty_print)
-
+        csskrter = BulmaCsskrt(filename)
 
     csskrter.freshify()
+    csskrter.output(pretty_print)
     print()
     print("~~~ Done! ~~~~")
 
