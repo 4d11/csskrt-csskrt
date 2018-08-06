@@ -1,5 +1,5 @@
 from bs4 import Tag
-from csskrt import Csskrt
+from .csskrt import Csskrt
 
 
 class BootstrapCsskrt(Csskrt):
