@@ -16,7 +16,6 @@ def bootstrap_csskrt():
     after = bs_csskrt.soup
     return before, after
 
-# Fix checkbox case
 
 class TestBootstrapButtons():
     def test_compare_num_button_tags(self, bootstrap_csskrt):

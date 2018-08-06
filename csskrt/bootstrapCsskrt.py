@@ -9,6 +9,7 @@ class BootstrapCsskrt(Csskrt):
             'select': 'custom-select',
             'button': 'btn btn-primary',
             'checkbox': 'form-check-input',
+            'radio': 'form-check-input',
         }
         super().__init__(fileName, tag_styles)
 
@@ -62,33 +63,51 @@ class BootstrapCsskrt(Csskrt):
         :return:
         """
         for form in self.soup.find_all('form'):
-            spotted_label = None
+            input_ = None
+            label = None
+
             for elem in form.children:
                 if elem.name == 'label':
-                    spotted_label = elem
-                    if 'label' in tag_dict:
-                        self.add_class_to_element(elem, tag_dict['label'])
-                elif elem.name == 'input':
-                    self.add_class_to_element(elem, tag_dict['input'])
+                    label = elem
+                    # See if there is a input within the label (sometimes done for radio/cb)
+                    input_within_label = elem.find_all('input', recursive=False)
+                    if input_within_label:
+                        # todo handle this case
+                        raise Warning("No support for inputs nested within labels for Bootstrap"
+                                      "for now.")
+
+                elif elem.name == 'input' or elem.name == 'select':
+                    if input_:
+                        raise Exception("Found input without adjacent label")
+                    else:
+                        input_ = elem
+
                     if elem.get('type') == 'radio':
                         if 'radio' in tag_dict:
                             self.add_class_to_element(elem, tag_dict['radio'])
                     elif elem.get('type') == 'checkbox':
                         if 'checkbox' in tag_dict:
                             self.add_class_to_element(elem, tag_dict['checkbox'])
-
-                    # Add overall wrapper
-                    if not spotted_label:
-                        # add wrapper
-                        field_div = self.soup.new_tag('div', **{'class': 'form-group'})
-                        elem.wrap(field_div)
                     else:
-                        # the input has a preceding label
-                        field_div = self.soup.new_tag('div', **{'class': 'form-group'})
-                        spotted_label.wrap(field_div)
-                        field_div.append(elem)
-                        spotted_label = None
+                        self.add_class_to_element(elem, tag_dict['input'])
 
-                    # Add input wrapper
-                    control_div = self.soup.new_tag('div', **{'class': 'control'})
-                    elem.wrap(control_div)
+                elif elem.name == 'div':
+                    # todo handle the case we have a prexisting div in form
+                    raise Warning("No support yet for input elements in divs within a form")
+
+                # Add overall wrapper
+                if input_ and label:
+                    if input_.get('type') == 'radio' or input_.get('type') == 'checkbox':
+                        self.add_class_to_element(label, 'form-check-label')
+                        field_div = self.soup.new_tag('div', **{'class': 'form-check'})
+                        # Add label then input
+                        input_.wrap(field_div)
+                        field_div.append(label)
+
+                    else:
+                        field_div = self.soup.new_tag('div', **{'class': 'form-group'})
+                        # Add label then input
+                        label.wrap(field_div)
+                        field_div.append(input_)
+
+                    input_, label = None, None

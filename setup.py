@@ -17,6 +17,6 @@ setup(
     url='https://github.com/4d11/csskrt',
     entry_points='''
         [console_scripts]
-        csskrt=csskrt.main:freshify
+        csskrt=main:freshify
     ''',
 )

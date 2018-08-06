@@ -1,12 +1,11 @@
-#!/usr/bin/env python
 import click
-from .bulmaCsskrt import BulmaCsskrt
-from .bootstrapCsskrt import BootstrapCsskrt
+from csskrt.bulmaCsskrt import BulmaCsskrt
+from csskrt.bootstrapCsskrt import BootstrapCsskrt
 
 
 @click.command()
 @click.argument('filename', type=click.Path(exists=True))
-@click.option('--framework', '-f', default='bulma',
+@click.option('--framework', '-f', default='bootstrap',
               type=click.Choice(['bulma', 'bootstrap']),
               help='Name of the framework. De')
 @click.option('--pretty-print', '-p', is_flag=True)

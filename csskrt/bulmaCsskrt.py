@@ -8,7 +8,6 @@ class BulmaCsskrt(Csskrt):
             'input': 'input',
             'label': 'label',
             'textarea': 'textarea',
-            'select': 'select',
             'button': 'button',
             'checkbox': 'checkbox',
             'radio': 'radio',
@@ -51,9 +50,6 @@ class BulmaCsskrt(Csskrt):
             'td': 'td'
         }
 
-    def get_list_styles(self):
-        return {}  # no list styles
-
     def add_form_classes(self, tag_dict: dict):
         """
         The only difference between this and parent implementation is the addition of adding
@@ -62,33 +58,70 @@ class BulmaCsskrt(Csskrt):
         :return:
         """
         for form in self.soup.find_all('form'):
-            spotted_label = None
+            label, input_ = None, None
             for elem in form.children:
                 if elem.name == 'label':
-                    spotted_label = elem
+                    label = elem
                     if 'label' in tag_dict:
                         self.add_class_to_element(elem, tag_dict['label'])
+
+                    # See if there is a input within the label (sometimes done for radio/cb)
+                    input_within_label = elem.find_all('input', recursive=False)
+                    if input_within_label:
+                        input_type = input_within_label.get('type')
+                        if input_type == 'checkbox':
+                            self.add_class_to_element(label, 'checkbox')
+                        elif input_type == 'radio':
+                            self.add_class_to_element(label, 'radio')
+                        label = None
+                        input = None
+
                 elif elem.name == 'input':
-                    self.add_class_to_element(elem, tag_dict['input'])
-                    if elem.get('type') == 'radio':
-                        if 'radio' in tag_dict:
-                            self.add_class_to_element(elem, tag_dict['radio'])
-                    elif elem.get('type') == 'checkbox':
-                        if 'checkbox' in tag_dict:
-                            self.add_class_to_element(elem, tag_dict['checkbox'])
+                    if input_:
+                        raise Exception("Found input without adjacent label")
+                    else:
+                        input_ = elem
+
+                    if elem.get('type') != 'radio' and elem.get('type') != 'checkbox':
+                        # Radio/CB don't take a class but their label does
+                        self.add_class_to_element(elem, tag_dict['input'])
+
+                elif elem.name == 'select':
+                    # Add select div
+                    select_div = self.soup.new_tag('div', **{'class': 'select'})
+                    elem.wrap(select_div)
+
+                    # Add control div
+                    control_div = self.soup.new_tag('div', **{'class': 'control'})
+                    select_div.wrap(control_div)
 
                     # Add overall wrapper
-                    if not spotted_label:
-                        # add wrapper
-                        field_div = self.soup.new_tag('div', **{'class': 'field'})
-                        elem.wrap(field_div)
-                    else:
-                        # the input has a preceding label
-                        field_div = self.soup.new_tag('div', **{'class': 'field'})
-                        spotted_label.wrap(field_div)
-                        field_div.append(elem)
-                        spotted_label = None
+                    field_div = self.soup.new_tag('div', **{'class': 'field'})
+                    control_div.wrap(field_div)
 
-                    # Add input wrapper
-                    control_div = self.soup.new_tag('div', **{'class': 'control'})
-                    elem.wrap(control_div)
+                if input_ and label:
+                    if input_.get('type') == 'radio' or input_.get('type') == 'checkbox':
+                        if input_.get('type') == 'radio':
+                            self.add_class_to_element(label, 'radio')
+                        else:
+                            self.add_class_to_element(label, 'checkbox')
+
+                        # Add input then label
+                        # todo wrap all consecutive inputs with wrapper
+                        # control_div = self.soup.new_tag('div', **{'class': 'control'})
+                        # label.wrap(control_div)
+                        label.insert(0, input_)
+                    else:
+                        # Add overall wrapper
+                        field_div = self.soup.new_tag('div', **{'class': 'field'})
+                        label.wrap(field_div)
+                        field_div.append(input_)
+
+                        # Add input wrapper
+                        control_div = self.soup.new_tag('div', **{'class': 'control'})
+                        input_.wrap(control_div)
+
+                    label, input_ = None, None
+
+    def get_list_styles(self):
+        return {}  # no list styles
