@@ -17,7 +17,7 @@ def freshify(filename, framework):
         raise Exception("Invalid framework")
 
     csskrter.freshify()
-    print("Done !")
+    print("Done!")
 
 
 if __name__ == '__main__':

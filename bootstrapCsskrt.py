@@ -92,7 +92,3 @@ class BootstrapCsskrt(Csskrt):
                     # Add input wrapper
                     control_div = self.soup.new_tag('div', **{'class': 'control'})
                     elem.wrap(control_div)
-                elif type(elem) == Tag:  # ignore  NavigableStrings like /n
-                    spotted_label = None
-                    if (tag_dict.get(elem.name)):
-                        self.add_class_to_element(elem, tag_dict[elem.name])

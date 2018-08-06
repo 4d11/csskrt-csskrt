@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, Tag, NavigableString
+from bs4 import BeautifulSoup, Tag, NavigableString, Doctype
 import os
 from abc import ABC, abstractmethod
 from typing import List, Dict, NoReturn
@@ -105,9 +105,9 @@ class Csskrt(ABC):
                         if 'checkbox' in tag_dict:
                             self.add_class_to_element(elem, tag_dict['checkbox'])
 
-                elif type(elem) == Tag:  # ignore  NavigableStrings like /n
-                    if tag_dict.get(elem.name):
-                        self.add_class_to_element(elem, tag_dict[elem.name])
+                # elif type(elem) == Tag:  # ignore  NavigableStrings like /n
+                #     if tag_dict.get(elem.name):
+                #         self.add_class_to_element(elem, tag_dict[elem.name])
 
     def add_table_classes(self, table_tag_dict: dict) -> NoReturn:
         """
@@ -148,6 +148,20 @@ class Csskrt(ABC):
                     # recursive=False to prevent double modifying for nested lists
                     self.add_class_to_element(li, list_tags['li'])
 
+
+    def add_general_classes(self):
+        """
+        Adds styles to single elements
+        :return:
+        """
+        supported_classes = (
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'button', 'a', 'nav'
+        )
+        for tag in self.tag_styles:
+            if tag in supported_classes:
+                for elem in self.soup.find_all(tag):
+                    self.add_class_to_element(elem, self.tag_styles[tag])
+
     def output(self) -> NoReturn:
         """
         Outputs a new file.
@@ -161,9 +175,11 @@ class Csskrt(ABC):
         with open(new_file_name, 'w') as out_file:
             out_file.write(self.soup.prettify())
 
+
     def freshify(self) -> NoReturn:
         """
         Main function that applies all the necessary styles
+
         :return:
         """
         starter_tags = self.get_starter_tags()
@@ -171,12 +187,21 @@ class Csskrt(ABC):
         table_styles = self.get_table_styles()
         list_styles = self.get_list_styles()
 
+        # Modify the head
         self.initialize_framework(self.soup.head, starter_tags)
+
+        # Add the "wrapper" tag
         if wrapper_tag:
             self.add_wrapper_tag(wrapper_tag)
+
+        #  Elements that have children eg. tables, lists, forms have their own
+        #  dedicated function to support complex operations if necessary.
         self.add_form_classes(self.tag_styles)
         self.add_list_classes(list_styles)
         self.add_table_classes(table_styles)
-        self.output()
 
-# print(btn.get('class', []))
+        # Add styles for the rest of the elements
+        self.add_general_classes()
+
+        # Output the modified html file
+        self.output()

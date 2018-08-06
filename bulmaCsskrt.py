@@ -12,6 +12,12 @@ class BulmaCsskrt(Csskrt):
             'button': 'button',
             'checkbox': 'checkbox',
             'radio': 'radio',
+            'h1': 'title is-1',
+            'h2': 'title is-2',
+            'h3': 'title is-3',
+            'h4': 'title is-4',
+            'h5': 'title is-5',
+            'h6': 'title is-6'
         }
         super().__init__(fileName, tag_styles)
 
@@ -86,8 +92,3 @@ class BulmaCsskrt(Csskrt):
                     # Add input wrapper
                     control_div = self.soup.new_tag('div', **{'class': 'control'})
                     elem.wrap(control_div)
-
-                elif type(elem) == Tag:  # ignore  NavigableStrings like /n
-                    spotted_label = None
-                    if (tag_dict.get(elem.name)):
-                        self.add_class_to_element(elem, tag_dict[elem.name])
