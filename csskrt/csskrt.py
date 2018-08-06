@@ -206,7 +206,4 @@ class Csskrt(ABC):
         # Add styles for the rest of the elements
         self.add_general_classes()
 
-        # Output the modified html file
-        self.output()
-
         return self.soup

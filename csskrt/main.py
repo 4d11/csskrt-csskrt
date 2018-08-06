@@ -20,6 +20,7 @@ def freshify(filename, framework, pretty_print):
 
 
     csskrter.freshify()
+    csskrter.output()
     print()
     print("~~~ Done! ~~~~")
 
