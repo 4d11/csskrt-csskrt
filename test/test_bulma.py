@@ -1,38 +1,36 @@
 import sys, os
 import copy
-import unittest
 import pytest
 from bs4 import BeautifulSoup
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from csskrt.bootstrapCsskrt import BootstrapCsskrt
+from csskrt.bulmaCsskrt import BulmaCsskrt
 
 
 @pytest.fixture()
-def bootstrap_csskrt():
-    bs_csskrt = BootstrapCsskrt(os.path.join(os.path.dirname(__file__), 'input/test1.html'))
-    before = copy.copy(bs_csskrt.soup)
-    bs_csskrt.freshify()
-    after = bs_csskrt.soup
+def bulma_csskrt():
+    bulma_csskrt = BulmaCsskrt(os.path.join(os.path.dirname(__file__), 'input/test1.html'))
+    before = copy.copy(bulma_csskrt.soup)
+    bulma_csskrt.freshify()
+    after = bulma_csskrt.soup
     return before, after
 
-# Fix checkbox case
 
-class TestBootstrapButtons():
-    def test_compare_num_button_tags(self, bootstrap_csskrt):
-        before: BeautifulSoup = bootstrap_csskrt[0]
-        after: BeautifulSoup = bootstrap_csskrt[1]
+class TestBulmaButtons():
+    def test_compare_num_button_tags(self, bulma_csskrt):
+        before: BeautifulSoup = bulma_csskrt[0]
+        after: BeautifulSoup = bulma_csskrt[1]
         tag = 'button'
 
         old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
         assert (len(old_tags) == len(new_tags))
 
-    def test_buttons_styles(self, bootstrap_csskrt):
-        before: BeautifulSoup = bootstrap_csskrt[0]
-        after: BeautifulSoup = bootstrap_csskrt[1]
+    def test_buttons_styles(self, bulma_csskrt):
+        before: BeautifulSoup = bulma_csskrt[0]
+        after: BeautifulSoup = bulma_csskrt[1]
         tag = 'button'
-        style = ['btn', 'btn-primary']
+        style = ['button']
 
         old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
@@ -45,9 +43,9 @@ class TestBootstrapButtons():
 
             assert(set(old_class).issubset(new_class))
 
-    def test_buttons_content(self, bootstrap_csskrt):
-        before: BeautifulSoup = bootstrap_csskrt[0]
-        after: BeautifulSoup = bootstrap_csskrt[1]
+    def test_buttons_content(self, bulma_csskrt):
+        before: BeautifulSoup = bulma_csskrt[0]
+        after: BeautifulSoup = bulma_csskrt[1]
         tag = 'button'
 
         old_tags = before.find_all(tag)
@@ -57,20 +55,20 @@ class TestBootstrapButtons():
 
 
 class TestBootstrapForm():
-    def test_number_form_tags(self, bootstrap_csskrt):
-        before: BeautifulSoup = bootstrap_csskrt[0]
-        after: BeautifulSoup = bootstrap_csskrt[1]
+    def test_number_form_tags(self, bulma_csskrt):
+        before: BeautifulSoup = bulma_csskrt[0]
+        after: BeautifulSoup = bulma_csskrt[1]
         tag = 'form'
 
         old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
         assert (len(old_tags) == len(new_tags))
 
-    def test_form_wrapper(self, bootstrap_csskrt):
-        before: BeautifulSoup = bootstrap_csskrt[0]
-        after: BeautifulSoup = bootstrap_csskrt[1]
+    def test_form_wrapper(self, bulma_csskrt):
+        before: BeautifulSoup = bulma_csskrt[0]
+        after: BeautifulSoup = bulma_csskrt[1]
         tag = 'form'
-        wrapper_class = 'form-group'
+        wrapper_class = 'field'
 
         old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
