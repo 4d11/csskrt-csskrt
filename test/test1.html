@@ -7,17 +7,27 @@
 
 <body>
 <div>
-    <p> Hello World </p>
+    <h1> Hello World </h1>
     <p class="testclass"> Bonjour !</p>
     <button> Click Me !</button>
-    <button class="my-button-test"> Click Me !</button>
 
     <form>
-        <label for="someText"> </label>
+        <label for="someText"> Here is an input field </label>
         <input id="someText" type="text">
-        <input type="radio">
 
-        <button type="submit" onclick="alert('submitted')"> Click me</button>
+        <div>
+            <label> Option 1
+                <input type="radio" name="my-radio">
+            </label>
+            <label> Option 2
+                <input type="radio" name="my-radio">
+            </label>
+            <label> Option 3
+                <input type="radio" name="my-radio">
+            </label>
+        </div>
+
+        <button class="my-button-test" type="submit" onclick="alert('submitted')"> Click me</button>
     </form>
 
     <table id="test">
@@ -31,7 +41,31 @@
             <td>Smith</td>
             <td>21</td>
         </tr>
+        <tr>
+            <td>Susan</td>
+            <td>Johnson</td>
+            <td>66</td>
+        </tr>
     </table>
+
+    <div>
+        <h1> Car Brands</h1>
+        <ul>
+            <li>
+                BMW
+                <ul>
+                    <li> Mini</li>
+                    <li> Rolls Royce</li>
+                </ul>
+            </li>
+            <li> Honda
+                <ul>
+                    <li> Acura</li>
+                </ul>
+            </li>
+            <li> Toyota</li>
+        </ul>
+    </div>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import click
 from bulmaCsskrt import BulmaCsskrt
+from bootstrapCsskrt import BootstrapCsskrt
 
 
 @click.command()
@@ -9,11 +10,14 @@ def freshify(filename, framework):
     csskrter = None
 
     if framework == 'bootstrap':
-        raise NotImplementedError
+        csskrter = BootstrapCsskrt(filename)
     elif framework == 'bulma':
         csskrter = BulmaCsskrt(filename)
+    else:
+        raise Exception("Invalid framework")
 
-        csskrter.freshify()
+    csskrter.freshify()
+    print("Done !")
 
 
 if __name__ == '__main__':

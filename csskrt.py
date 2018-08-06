@@ -39,6 +39,18 @@ class Csskrt(ABC):
         :return:
         """
 
+    @abstractmethod
+    def version(self) -> str:
+        """
+        :return: The version number
+        """
+
+    @abstractmethod
+    def get_list_styles(self) -> Dict:
+        """
+        :return:
+        """
+
     def add_class_to_element(self, elem, css_class):
         if not elem.get('class'):
             elem['class'] = css_class
@@ -80,7 +92,8 @@ class Csskrt(ABC):
         for form in self.soup.find_all('form'):
             for elem in form.children:
                 if elem.name == 'label':
-                    self.add_class_to_element(elem, tag_dict['label'])
+                    if 'label' in tag_dict:
+                        self.add_class_to_element(elem, tag_dict['label'])
 
                 elif elem.name == 'input':
                     self.add_class_to_element(elem, tag_dict['input'])
@@ -92,8 +105,8 @@ class Csskrt(ABC):
                         if 'checkbox' in tag_dict:
                             self.add_class_to_element(elem, tag_dict['checkbox'])
 
-                elif type(elem) == Tag: # ignore  NavigableStrings like /n
-                    if (tag_dict.get(elem.name)):
+                elif type(elem) == Tag:  # ignore  NavigableStrings like /n
+                    if tag_dict.get(elem.name):
                         self.add_class_to_element(elem, tag_dict[elem.name])
 
     def add_table_classes(self, table_tag_dict: dict) -> NoReturn:
@@ -117,6 +130,24 @@ class Csskrt(ABC):
                     for elem in all_table_elems:
                         self.add_class_to_element(elem, table_tag_dict[tk])
 
+    def add_list_classes(self, list_tags: dict) -> NoReturn:
+        """
+        Supports the following tags:
+            ('ul', 'ol', 'li')
+        :param list_tags:
+        :return:
+        """
+        for list in self.soup.find_all(['ol', 'ul']):
+            if list.name == 'ul' and list_tags.get('ul'):
+                self.add_class_to_element(list, list_tags['ul'])
+            elif list.name == 'ol' and list_tags.get('ol'):
+                self.add_class_to_element(list, list_tags['ol'])
+
+            if list_tags.get('li'):
+                for li in list.find_all('li', recursive=False):
+                    # recursive=False to prevent double modifying for nested lists
+                    self.add_class_to_element(li, list_tags['li'])
+
     def output(self) -> NoReturn:
         """
         Outputs a new file.
@@ -137,13 +168,15 @@ class Csskrt(ABC):
         """
         starter_tags = self.get_starter_tags()
         wrapper_tag = self.get_wrapper_tag()
-        table_tags = self.get_table_styles()
+        table_styles = self.get_table_styles()
+        list_styles = self.get_list_styles()
 
         self.initialize_framework(self.soup.head, starter_tags)
         if wrapper_tag:
             self.add_wrapper_tag(wrapper_tag)
         self.add_form_classes(self.tag_styles)
-        self.add_table_classes(table_tags)
+        self.add_list_classes(list_styles)
+        self.add_table_classes(table_styles)
         self.output()
 
 # print(btn.get('class', []))

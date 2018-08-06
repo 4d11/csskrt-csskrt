@@ -1,33 +1,40 @@
-from bs4 import BeautifulSoup, Tag, NavigableString
+from bs4 import Tag
 from csskrt import Csskrt
 
 
-class BulmaCsskrt(Csskrt):
+class BootstrapCsskrt(Csskrt):
     def __init__(self, fileName):
         tag_styles = {
-            'input': 'input',
-            'label': 'label',
-            'textarea': 'textarea',
-            'select': 'select',
-            'button': 'button',
-            'checkbox': 'checkbox',
-            'radio': 'radio',
+            'input': 'form-control',
+            'select': 'custom-select',
+            'button': 'btn btn-primary',
+            'checkbox': 'form-check-input',
         }
         super().__init__(fileName, tag_styles)
 
     def version(self):
-        return "v0.7.1"
+        return "v4.1"
 
     def get_starter_tags(self):
-        # hack since 'name' is reserved
-        meta = Tag(builder=self.soup.builder,
-                   name='meta',
-                   attrs={'name': "viewport", 'content': 'width=device-width, initial-scale=1'})
+        charset_meta = self.soup.new_tag(
+            'meta', charset='utf-8'
+        )
+
+        # hack since 'name' is reserve
+        viewport_meta = Tag(
+            builder=self.soup.builder,
+            name='meta',
+            attrs={'name': "viewport", 'content': 'width=device-width, initial-scale=1, shrink-to-fit=no'}
+        )
 
         stylesheet = self.soup.new_tag(
-            'link', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css'
+            'link',
+            rel='stylesheet',
+            href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
+            integrity='sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO',
+            crossorigin='anonymous'
         )
-        return [meta, stylesheet]
+        return [charset_meta, viewport_meta, stylesheet]
 
     def get_wrapper_tag(self):
         div = self.soup.new_tag(
@@ -38,21 +45,20 @@ class BulmaCsskrt(Csskrt):
     def get_table_styles(self):
         return {
             'table': 'table',
-            'thead': 'thead',
-            'tbody': 'tbody',
-            'tr': 'tr',
-            'th': 'th',
-            'td': 'td'
+            'thead': 'thead-light',
         }
 
     def get_list_styles(self):
-        return {}  # no list styles
+        return {
+            'ol': 'list-group',
+            'ul': 'list-group',
+            'li': 'list-group-item'
+        }
 
     def add_form_classes(self, tag_dict: dict):
         """
-        The only difference between this and parent implementation is the addition of adding
-         the 'input group' class
-        :param tag_dict:
+        Applies form classes, only difference between this and parent implementation is the addition of adding
+         the "input group wrapper" class
         :return:
         """
         for form in self.soup.find_all('form'):
@@ -74,11 +80,11 @@ class BulmaCsskrt(Csskrt):
                     # Add overall wrapper
                     if not spotted_label:
                         # add wrapper
-                        field_div = self.soup.new_tag('div', **{'class': 'field'})
+                        field_div = self.soup.new_tag('div', **{'class': 'form-group'})
                         elem.wrap(field_div)
                     else:
                         # the input has a preceding label
-                        field_div = self.soup.new_tag('div', **{'class': 'field'})
+                        field_div = self.soup.new_tag('div', **{'class': 'form-group'})
                         spotted_label.wrap(field_div)
                         field_div.append(elem)
                         spotted_label = None
@@ -86,7 +92,6 @@ class BulmaCsskrt(Csskrt):
                     # Add input wrapper
                     control_div = self.soup.new_tag('div', **{'class': 'control'})
                     elem.wrap(control_div)
-
                 elif type(elem) == Tag:  # ignore  NavigableStrings like /n
                     spotted_label = None
                     if (tag_dict.get(elem.name)):
