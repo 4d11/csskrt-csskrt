@@ -3,7 +3,7 @@ from csskrt import Csskrt
 
 
 class BulmaCsskrt(Csskrt):
-    def __init__(self, fileName):
+    def __init__(self, fileName, pretty_print):
         tag_styles = {
             'input': 'input',
             'label': 'label',
@@ -19,7 +19,7 @@ class BulmaCsskrt(Csskrt):
             'h5': 'title is-5',
             'h6': 'title is-6'
         }
-        super().__init__(fileName, tag_styles)
+        super().__init__(fileName, pretty_print, tag_styles)
 
     def version(self):
         return "v0.7.1"

@@ -3,14 +3,14 @@ from csskrt import Csskrt
 
 
 class BootstrapCsskrt(Csskrt):
-    def __init__(self, fileName):
+    def __init__(self, fileName, pretty_print):
         tag_styles = {
             'input': 'form-control',
             'select': 'custom-select',
             'button': 'btn btn-primary',
             'checkbox': 'form-check-input',
         }
-        super().__init__(fileName, tag_styles)
+        super().__init__(fileName, pretty_print, tag_styles)
 
     def version(self):
         return "v4.1"
