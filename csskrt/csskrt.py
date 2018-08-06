@@ -5,11 +5,10 @@ from typing import List, Dict, NoReturn
 
 
 class Csskrt(ABC):
-    def __init__(self, filename: str, pretty_print, tag_styles: Dict):
+    def __init__(self, filename: str, tag_styles: Dict):
         f = open(filename)  # should be able to handle dirs (for later) todo
         f_data = f.read()
 
-        self.pretty_print = pretty_print
         self.file_path = filename
         self.soup = BeautifulSoup(f_data, 'html.parser')
         self.tag_styles = tag_styles
@@ -149,7 +148,6 @@ class Csskrt(ABC):
                     # recursive=False to prevent double modifying for nested lists
                     self.add_class_to_element(li, list_tags['li'])
 
-
     def add_general_classes(self):
         """
         Adds styles to single elements
@@ -163,7 +161,7 @@ class Csskrt(ABC):
                 for elem in self.soup.find_all(tag):
                     self.add_class_to_element(elem, self.tag_styles[tag])
 
-    def output(self) -> NoReturn:
+    def output(self, pretty_print: bool) -> NoReturn:
         """
         Outputs a new file.
         :return:
@@ -174,7 +172,7 @@ class Csskrt(ABC):
 
         new_file_name = os.path.join(folder, 'output/csskrt_' + file_name + ext)
         with open(new_file_name, 'w') as out_file:
-            if self.pretty_print:
+            if pretty_print:
                 out_file.write(str(self.soup))
             else:
                 out_file.write(self.soup.prettify())
