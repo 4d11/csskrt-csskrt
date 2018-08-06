@@ -1,5 +1,5 @@
-from bs4 import BeautifulSoup, Tag, NavigableString
-from csskrt import Csskrt
+from bs4 import Tag
+from .csskrt import Csskrt
 
 
 class BulmaCsskrt(Csskrt):

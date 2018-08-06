@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import click
-from bulmaCsskrt import BulmaCsskrt
-from bootstrapCsskrt import BootstrapCsskrt
+from .bulmaCsskrt import BulmaCsskrt
+from .bootstrapCsskrt import BootstrapCsskrt
 
 
 @click.command()

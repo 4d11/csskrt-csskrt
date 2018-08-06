@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
 import codecs
 
 def long_description():
@@ -7,12 +7,16 @@ def long_description():
 
 
 setup(
-    name='Csskrt',
+    name='csskrt',
     version='0.1',
-    packages=['csskrt'],
+    packages=find_packages(),
+    include_package_data=True,
     license='MIT',
     long_description=long_description(),
     long_description_content_type='text/markdown',
     url='https://github.com/4d11/csskrt',
-    scripts=['csskrt/main'],
+    entry_points='''
+        [console_scripts]
+        csskrt=csskrt.main:freshify
+    ''',
 )

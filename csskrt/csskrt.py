@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, Tag, NavigableString, Doctype
+from bs4 import BeautifulSoup, Tag
 import os
 from abc import ABC, abstractmethod
 from typing import List, Dict, NoReturn
