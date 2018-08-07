@@ -4,12 +4,12 @@ import pytest
 from bs4 import BeautifulSoup
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from csskrt.bulmaCsskrt import BulmaCsskrt
+from csskrt.scripts.bulmaCsskrt import BulmaCsskrt
 
 
 @pytest.fixture()
 def bulma_csskrt():
-    bulma_csskrt = BulmaCsskrt(os.path.join(os.path.dirname(__file__), 'input/test1.html'))
+    bulma_csskrt = BulmaCsskrt(os.path.join(os.path.dirname(__file__), 'test1.html'))
     before = copy.copy(bulma_csskrt.soup)
     bulma_csskrt.freshify()
     after = bulma_csskrt.soup
@@ -64,22 +64,24 @@ class TestBootstrapForm():
         new_tags = after.find_all(tag)
         assert (len(old_tags) == len(new_tags))
 
-    def test_form_wrapper(self, bulma_csskrt):
+    def test_select_tags(self, bulma_csskrt):
         before: BeautifulSoup = bulma_csskrt[0]
         after: BeautifulSoup = bulma_csskrt[1]
         tag = 'form'
-        wrapper_class = 'field'
 
         old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
-        for form in new_tags:
-            wrappers = form.find_all('div', recursive=False, attrs={'class': wrapper_class})
-            inputs = form.find_all('input')
-            assert len(wrappers) == len(inputs)  # 1 input per wrapper ?
 
-            for wrapper in wrappers:
-                inputs = wrapper.find_all('input')
-                assert len(inputs) == 1
+        for form in new_tags:
+            for select in form.find_all('select'):
+                assert(select.parent.name == 'div' and 'select' in select.parent['class']  )
+                assert (select.parent.parent.name == 'div' and
+                        'control' in select.parent.parent['class'])
+                assert (select.parent.parent.parent.name == 'div' and
+                        'field' in select.parent.parent.parent['class'])
+
+
+
 
 
 

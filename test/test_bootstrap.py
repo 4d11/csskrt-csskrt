@@ -1,16 +1,15 @@
 import sys, os
 import copy
-import unittest
 import pytest
 from bs4 import BeautifulSoup
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from csskrt.bootstrapCsskrt import BootstrapCsskrt
+from csskrt.scripts.bootstrapCsskrt import BootstrapCsskrt
 
 
 @pytest.fixture()
 def bootstrap_csskrt():
-    bs_csskrt = BootstrapCsskrt(os.path.join(os.path.dirname(__file__), 'input/test1.html'))
+    bs_csskrt = BootstrapCsskrt(os.path.join(os.path.dirname(__file__), 'test1.html'))
     before = copy.copy(bs_csskrt.soup)
     bs_csskrt.freshify()
     after = bs_csskrt.soup
@@ -65,22 +64,18 @@ class TestBootstrapForm():
         new_tags = after.find_all(tag)
         assert (len(old_tags) == len(new_tags))
 
-    def test_form_wrapper(self, bootstrap_csskrt):
+    def check_checkboxes(self, bootstrap_csskrt):
         before: BeautifulSoup = bootstrap_csskrt[0]
         after: BeautifulSoup = bootstrap_csskrt[1]
         tag = 'form'
-        wrapper_class = 'form-group'
 
-        old_tags = before.find_all(tag)
         new_tags = after.find_all(tag)
         for form in new_tags:
-            wrappers = form.find_all('div', recursive=False, attrs={'class': wrapper_class})
-            inputs = form.find_all('input')
-            assert len(wrappers) == len(inputs)  # 1 input per wrapper ?
+            checkbox = form.find_all('input', type='checkbox')
+            assert(checkbox.get('class') == 'form-check-input')
 
-            for wrapper in wrappers:
-                inputs = wrapper.find_all('input')
-                assert len(inputs) == 1
+            parent = checkbox.parent
+            assert(parent.name == 'div' and parent.get('class') == 'form-check')
 
 
 
