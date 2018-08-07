@@ -15,7 +15,8 @@ setup(
     license='MIT',
     long_description=long_description(),
     long_description_content_type='text/markdown',
-    url='https://github.com/4d11/csskrt',
+    author='4d11',
+    url='https://github.com/4d11/csskrt-csskrt',
     keywords='css bootstrap bulma csskrt skrrt',
     entry_points='''
         [console_scripts]
