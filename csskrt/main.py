@@ -1,6 +1,6 @@
 import click
-from csskrt.bulmaCsskrt import BulmaCsskrt
-from csskrt.bootstrapCsskrt import BootstrapCsskrt
+from .scripts.bulmaCsskrt import BulmaCsskrt
+from .scripts.bootstrapCsskrt import BootstrapCsskrt
 
 
 @click.command()
