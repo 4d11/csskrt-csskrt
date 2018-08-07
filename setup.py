@@ -22,4 +22,15 @@ setup(
         [console_scripts]
         csskrt=csskrt.main:freshify
     ''',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Topic :: Software Development :: Code Generators',
+        'Topic :: Software Development :: User Interfaces',
+        'Topic :: Text Processing :: Markup',
+        'Topic :: Utilities'
+    ]
 )
