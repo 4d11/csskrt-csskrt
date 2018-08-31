@@ -189,7 +189,8 @@ class Csskrt(ABC):
         list_styles = self.get_list_styles()
 
         # Modify the head
-        self.initialize_framework(self.soup.head, starter_tags)
+        if self.soup.head:
+            self.initialize_framework(self.soup.head, starter_tags)
 
         # Add the "wrapper" tag
         if wrapper_tag:
