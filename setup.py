@@ -1,20 +1,20 @@
 from setuptools import setup, find_packages
 import codecs
-
+import os
 
 def long_description():
-    with codecs.open('README.md', encoding='utf8') as f:
+    here = os.path.dirname(os.path.abspath(__file__))
+    with codecs.open(os.path.join(here, 'README.md'), encoding='utf8') as f:
         return f.read()
 
 
 setup(
     name='csskrt-csskrt',
-    version='0.1',
+    version='0.0.1',
     packages=find_packages(),
     include_package_data=True,
     license='MIT',
-    long_description=long_description(),
-    long_description_content_type='text/markdown',
+    #  long_description=long_description(), #todo getting file error need to fix
     author='4d11',
     url='https://github.com/4d11/csskrt-csskrt',
     keywords='css bootstrap bulma csskrt skrrt',
@@ -32,5 +32,9 @@ setup(
         'Topic :: Software Development :: User Interfaces',
         'Topic :: Text Processing :: Markup',
         'Topic :: Utilities'
+    ],
+    install_requires=[
+        'click',
+        'beautifulsoup4',
     ]
 )
