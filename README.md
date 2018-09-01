@@ -14,7 +14,7 @@ style="margin: 0px 50px">
 </a>
 
 ## Quick install
-```pip install csskrt```
+```pip install csskrt-csskrt```
 
 ## Usage
 To run the program, type:
