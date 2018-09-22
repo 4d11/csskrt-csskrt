@@ -10,7 +10,7 @@ def long_description():
 
 setup(
     name='csskrt-csskrt',
-    version='0.0.2',
+    version='0.0.3',
     packages=find_packages(),
     include_package_data=True,
     license='MIT',
